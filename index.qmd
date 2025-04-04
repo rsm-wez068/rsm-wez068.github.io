@@ -1,0 +1,11 @@
+---
+title: "Wei Zhou"
+image: "images/profile_pic.png"
+about:
+    template: jolla
+    links:
+        - icon: envelope
+          href: wilhelmzhou62@gmail.com
+        - icon: linkedin
+          href: https://www.linkedin.com/in/wei-zhou-058aab26a/
+---
