@@ -379,25 +379,25 @@ Here we run a Poisson regression and to describe variation in the number of revi
 - coef = +0.00005022
 - exp(0.00005022) = 1.0000502
 – **+0.005%** expected reviews per extra day listed.  
-– Over 100 days: \((1.0000502)^{100}\approx1.005\) → **0.5%** increase.
+– Over 100 days: 1.0000502^{100}\approx1.005 → **0.5%** increase.
 
 3. Price (`price`)
 
 - coef = -0.0005  
 - exp(-0.0005) = 0.9995 
 – **–0.05%** expected reviews per \$1 increase.  
-– For \$100 more: \(\exp(-0.0005\times100)\approx0.951\) → **4.9%** decrease.
+– For \$100 more: \exp(-0.0005\times100)\approx0.951 → **4.9%** decrease.
 
 4. Bathrooms (`bathrooms`)
 
 - beta = -0.1064 
-- exp(-0.1064)\approx0.899
+- exp(-0.1064) = 0.899
 – **10.1% fewer** expected reviews per additional bathroom.
 
 5. Bedrooms (`bedrooms`)
 
 - beta = +0.0982 
-- exp(0.0982)\approx1.103
+- exp(0.0982)= 1.103
 – **10.3% more** expected reviews per additional bedroom.
 
 6. Room type (`room_type`, reference = Entire home/apt)
@@ -408,5 +408,5 @@ Here we run a Poisson regression and to describe variation in the number of revi
 7. Instant bookable (`instant_bookable`)
 
 - coef = +0.3748  
-- exp(0.3748)\approx1.454  
+- exp(0.3748) = 1.454  
 – **45.4% more** expected reviews if instant-bookable.
