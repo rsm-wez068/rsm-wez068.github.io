@@ -371,43 +371,42 @@ Here we run a Poisson regression and to describe variation in the number of revi
 1. Baseline (Intercept)
 
 - **Intercept = 2.7715**  
-- \(\exp(2.7715)\approx16.0\)  
-  – Expected number of reviews for the reference listing (entire home/apt, non-instant-bookable, 0 days listed, \$0 price, 0 bedrooms, 0 bathrooms).
+- exp(2.7715) = 16.0
+– Expected number of reviews for the reference listing (entire home/apt, non-instant-bookable, 0 days listed, \$0 price, 0 bedrooms, 0 bathrooms).
 
 2. Days listed (`days`)
 
-- \(\beta = +0.00005022\)  
-- \(\exp(0.00005022)\approx1.0000502\)  
-  – **+0.005%** expected reviews per extra day listed.  
-  – Over 100 days: \((1.0000502)^{100}\approx1.005\) → **0.5%** increase.
+- coef = +0.00005022
+- exp(0.00005022) = 1.0000502
+– **+0.005%** expected reviews per extra day listed.  
+– Over 100 days: \((1.0000502)^{100}\approx1.005\) → **0.5%** increase.
 
 3. Price (`price`)
 
-- \(\beta = -0.0005\)  
-- \(\exp(-0.0005)\approx0.9995\)  
-  – **–0.05%** expected reviews per \$1 increase.  
-  – For \$100 more: \(\exp(-0.0005\times100)\approx0.951\) → **4.9%** decrease.
+- coef = -0.0005  
+- exp(-0.0005) = 0.9995 
+– **–0.05%** expected reviews per \$1 increase.  
+– For \$100 more: \(\exp(-0.0005\times100)\approx0.951\) → **4.9%** decrease.
 
 4. Bathrooms (`bathrooms`)
 
-- \(\beta = -0.1064\)  
-- \(\exp(-0.1064)\approx0.899\)  
-  – **10.1% fewer** expected reviews per additional bathroom.
+- beta = -0.1064 
+- exp(-0.1064)\approx0.899
+– **10.1% fewer** expected reviews per additional bathroom.
 
 5. Bedrooms (`bedrooms`)
 
-- \(\beta = +0.0982\)  
-- \(\exp(0.0982)\approx1.103\)  
-  – **10.3% more** expected reviews per additional bedroom.
+- beta = +0.0982 
+- exp(0.0982)\approx1.103
+– **10.3% more** expected reviews per additional bedroom.
 
 6. Room type (`room_type`, reference = Entire home/apt)
 
-- **Private room**: \(\beta=-0.1531\) → \(\exp(-0.1531)\approx0.858\) ⇒ **14.2% fewer** reviews  
-- **Shared room**: \(\beta=-0.4080\) → \(\exp(-0.4080)\approx0.665\) ⇒ **33.5% fewer** reviews
+- **Private room**: coef = -0.1531 → exp(-0.1531) = 0.858 ⇒ **14.2% fewer** reviews  
+- **Shared room**: coef = -0.4080 → exp(-0.4080) = 0.665 ⇒ **33.5% fewer** reviews
 
 7. Instant bookable (`instant_bookable`)
 
-- \(\beta = +0.3748\)  
-- \(\exp(0.3748)\approx1.454\)  
-  – **45.4% more** expected reviews if instant-bookable.
-
+- coef = +0.3748  
+- exp(0.3748)\approx1.454  
+– **45.4% more** expected reviews if instant-bookable.
