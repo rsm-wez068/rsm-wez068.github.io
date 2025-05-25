@@ -261,9 +261,8 @@ u_{ij} = (1 \times Netflix_j) + (0.5 \times Prime_j) + (-0.8*Ads_j) - 0.1\times 
 </section>
 <section id="preparing-the-data-for-estimation" class="level2">
 <h2 class="anchored" data-anchor-id="preparing-the-data-for-estimation">3. Preparing the Data for Estimation</h2>
-<p>The “hard part” of the MNL likelihood function is organizing the data, as we need to keep track of 3 dimensions (consumer <span class="math inline">\(i\)</span>, covariate <span class="math inline">\(k\)</span>, and product <span class="math inline">\(j\)</span>) instead of the typical 2 dimensions for cross-sectional regression models (consumer <span class="math inline">\(i\)</span> and covariate <span class="math inline">\(k\)</span>). The fact that each task for each respondent has the same number of alternatives (3) helps. In addition, we need to convert the categorical variables for brand and ads into binary variables.</p>
-<p><em>todo: reshape and prep the data</em></p>
-<div id="a03f4160" class="cell" data-execution_count="1">
+<p>Here we prepare the data for estimation. We need to keep track of 3 dimensions (consumer <span class="math inline">\(i\)</span>, covariate <span class="math inline">\(k\)</span>, and product <span class="math inline">\(j\)</span>) instead of the typical 2 dimensions for cross-sectional regression models (consumer <span class="math inline">\(i\)</span> and covariate <span class="math inline">\(k\)</span>). In addition, we need to convert the categorical variables for brand and ads into binary variables.</p>
+<div id="4f5baea9" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'conjoint_data.csv'</span>)</span>
@@ -460,9 +459,8 @@ u_{ij} = (1 \times Netflix_j) + (0.5 \times Prime_j) + (-0.8*Ads_j) - 0.1\times 
 </section>
 <section id="estimation-via-maximum-likelihood" class="level2">
 <h2 class="anchored" data-anchor-id="estimation-via-maximum-likelihood">4. Estimation via Maximum Likelihood</h2>
-<p><em>todo: Code up the log-likelihood function.</em></p>
-<p><em>todo: Use <code>optim()</code> in R or <code>scipy.optimize()</code> in Python to find the MLEs for the 4 parameters (<span class="math inline">\(\beta_\text{netflix}\)</span>, <span class="math inline">\(\beta_\text{prime}\)</span>, <span class="math inline">\(\beta_\text{ads}\)</span>, <span class="math inline">\(\beta_\text{price}\)</span>), as well as their standard errors (from the Hessian). For each parameter construct a 95% confidence interval.</em></p>
-<div id="35da3f05" class="cell" data-execution_count="2">
+<p>Now we use <code>scipy.optimize()</code> in Python to find the MLEs for the 4 parameters (<span class="math inline">\(\beta_\text{netflix}\)</span>, <span class="math inline">\(\beta_\text{prime}\)</span>, <span class="math inline">\(\beta_\text{ads}\)</span>, <span class="math inline">\(\beta_\text{price}\)</span>), as well as their standard errors (from the Hessian). For each parameter we also construct a 95% confidence interval.</p>
+<div id="97c0f0c5" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -511,7 +509,7 @@ beta_netflix:  0.9412 (SE = 0.1143), 95% CI = [0.7173, 1.1651]
 <h2 class="anchored" data-anchor-id="estimation-via-bayesian-methods">5. Estimation via Bayesian Methods</h2>
 <p>Now we try to estimate via a metropolis-hasting MCMC sampler of the posterior distribution. We take 11,000 steps and throw away the first 1,000, retaining the subsequent 10,000. For the betas on the binary variables, we use N(0,5), while for the price beta, we use N(0,1).</p>
 <p>A trace plot and a histogram of posterior for beta_netflix are also shown below to demonstrate the simulation result.</p>
-<div id="d10c4ab4" class="cell" data-execution_count="3">
+<div id="93e8d35e" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Log-likelihood function</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> log_likelihood(params):</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    beta_N, beta_P, beta_ads, beta_price <span class="op">=</span> params</span>
@@ -612,31 +610,31 @@ beta_netflix:  0.9412 (SE = 0.1143), 95% CI = [0.7173, 1.1651]
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">beta_netflix</td>
-<td>0.908241</td>
-<td>0.108535</td>
-<td>0.724960</td>
-<td>1.133365</td>
+<td>0.934235</td>
+<td>0.112623</td>
+<td>0.716985</td>
+<td>1.140732</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">beta_prime</td>
-<td>0.472916</td>
-<td>0.104316</td>
-<td>0.298973</td>
-<td>0.694971</td>
+<td>0.502163</td>
+<td>0.108455</td>
+<td>0.284626</td>
+<td>0.678891</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">beta_ads</td>
-<td>-0.727954</td>
-<td>0.086388</td>
-<td>-0.910427</td>
-<td>-0.586141</td>
+<td>-0.719028</td>
+<td>0.083336</td>
+<td>-0.861039</td>
+<td>-0.527342</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">beta_price</td>
-<td>-0.099610</td>
-<td>0.006782</td>
-<td>-0.112918</td>
-<td>-0.087812</td>
+<td>-0.098617</td>
+<td>0.006206</td>
+<td>-0.112478</td>
+<td>-0.086340</td>
 </tr>
 </tbody>
 </table>
@@ -644,15 +642,34 @@ beta_netflix:  0.9412 (SE = 0.1143), 95% CI = [0.7173, 1.1651]
 </div>
 </div>
 </div>
-<p>Compared to MLE approach: • The posterior means almost exactly match the MLEs, indicating that our priors were relatively weak compared to the data information. • Posterior SDs are slightly smaller than the MLE SEs for the ad and price coefficients; for brands they’re very similar, reflecting high information content in the data. • The 95% intervals overlap almost perfectly between Bayesian and frequentist approaches for all parameters, with negligible shifts.</p>
+<p>Compared to MLE approach:<br>
+• The posterior means almost exactly match the MLEs, indicating that our priors were relatively weak compared to the data information.<br>
+• Posterior SDs are slightly smaller than the MLE SEs for the ad and price coefficients; for brands they’re very similar, reflecting high information content in the data.<br>
+• The 95% intervals overlap almost perfectly between Bayesian and frequentist approaches for all parameters, with negligible shifts.</p>
 </section>
 <section id="discussion" class="level2">
 <h2 class="anchored" data-anchor-id="discussion">6. Discussion</h2>
 <ol type="1">
-<li><p>Observation Even without knowing the “true” simulated parameters, the estimates make sense: • They rank brands (Netflix &gt; Prime &gt; baseline) plausibly, • They show ads have a positive effect (β_ads &gt; 0), • And they capture the intuitive negative impact of price.</p></li>
-<li><p>Interpretation of <span class="math inline">\(\beta_\text{netflix}\)</span> &gt; <span class="math inline">\(\beta_\text{prime}\)</span> A larger $$ means a larger “slice” of the choice probability (holding other attributes equal). So respondents are, on average, more likely to pick Netflix over Prime if everything else (advertising, price) is the same.</p></li>
-<li><p>Negative Price Coefficient A negative price coefficient means higher prices lower utility, which is exactly what economic theory predicts: as the cost of an alternative goes up, its attractiveness (and thus its choice probability) goes down. The magnitude (≈ –0.1) tells you that a one-dollar increase in price multiplies an alternative’s odds by exp(–0.1) ≈ 0.90, i.e.&nbsp;a roughly 10% drop in odds per dollar.</p></li>
-<li><p>How to Move to a Hierarchical Model There are multiple steps we need to take if we want to move from a fixed-coefficients MNL to a hierarchical (random-parameters) model At simulation process, we would: • Specify hyper-parameters like a population mean vector and covariance matrix for betas • Draw individual betas • Generate choices conditional on <span class="math inline">\(\beta_\text{i}\)</span> At estimation process, we would: • Write down the integrated likelihood <span class="math inline">\(L(\mu, \Sigma)=\prod_{i=1}^N \int\left[\prod_{t=1}^{T_i} P\left(y_{i t} \mid X_{i t}, \beta\right)\right] \phi(\beta \mid \mu, \Sigma) d \beta\)</span> • Approximate or sample the integrals with methods like MLE or MCMC • Recover both levels of parameters</p>
+<li><p>Observation<br>
+Even without knowing the “true” simulated parameters, the estimates make sense:<br>
+• They rank brands (Netflix &gt; Prime &gt; baseline) plausibly,<br>
+• They show ads have a positive effect (β_ads &gt; 0),<br>
+• And they capture the intuitive negative impact of price.</p></li>
+<li><p>Interpretation of <span class="math inline">\(\beta_\text{netflix}\)</span> &gt; <span class="math inline">\(\beta_\text{prime}\)</span><br>
+A larger $$ means a larger “slice” of the choice probability (holding other attributes equal). So respondents are, on average, more likely to pick Netflix over Prime if everything else (advertising, price) is the same.</p></li>
+<li><p>Negative Price Coefficient<br>
+A negative price coefficient means higher prices lower utility, which is exactly what economic theory predicts: as the cost of an alternative goes up, its attractiveness (and thus its choice probability) goes down. The magnitude (≈ –0.1) tells you that a one-dollar increase in price multiplies an alternative’s odds by exp(–0.1) ≈ 0.90, i.e.&nbsp;a roughly 10% drop in odds per dollar.</p></li>
+<li><p>How to Move to a Hierarchical Model<br>
+There are multiple steps we need to take if we want to move from a fixed-coefficients MNL to a hierarchical (random-parameters) model.<br>
+At simulation process, we would:<br>
+• Specify hyper-parameters like a population mean vector and covariance matrix for betas<br>
+• Draw individual betas<br>
+• Generate choices conditional on <span class="math inline">\(\beta_\text{i}\)</span><br>
+At estimation process, we would:<br>
+• Write down the integrated likelihood<br>
+<span class="math inline">\(L(\mu, \Sigma)=\prod_{i=1}^N \int\left[\prod_{t=1}^{T_i} P\left(y_{i t} \mid X_{i t}, \beta\right)\right] \phi(\beta \mid \mu, \Sigma) d \beta\)</span><br>
+• Approximate or sample the integrals with methods like MLE or MCMC<br>
+• Recover both levels of parameters</p>
 <p>The key change here is that, instead of one global $_$ vector, you model a distribution over betas.</p></li>
 </ol>
 

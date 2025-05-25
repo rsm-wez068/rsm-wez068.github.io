@@ -65,9 +65,7 @@ R code on ChatGPT
 
 ## 3. Preparing the Data for Estimation
 
-The "hard part" of the MNL likelihood function is organizing the data, as we need to keep track of 3 dimensions (consumer $i$, covariate $k$, and product $j$) instead of the typical 2 dimensions for cross-sectional regression models (consumer $i$ and covariate $k$). The fact that each task for each respondent has the same number of alternatives (3) helps.  In addition, we need to convert the categorical variables for brand and ads into binary variables.
-
-_todo: reshape and prep the data_
+Here we prepare the data for estimation. We need to keep track of 3 dimensions (consumer $i$, covariate $k$, and product $j$) instead of the typical 2 dimensions for cross-sectional regression models (consumer $i$ and covariate $k$). In addition, we need to convert the categorical variables for brand and ads into binary variables.
 
 ```{python}
 import pandas as pd
@@ -84,9 +82,7 @@ df
 
 ## 4. Estimation via Maximum Likelihood
 
-_todo: Code up the log-likelihood function._
-
-_todo: Use `optim()` in R or `scipy.optimize()` in Python to find the MLEs for the 4 parameters ($\beta_\text{netflix}$, $\beta_\text{prime}$, $\beta_\text{ads}$, $\beta_\text{price}$), as well as their standard errors (from the Hessian). For each parameter construct a 95% confidence interval._
+Now we use `scipy.optimize()` in Python to find the MLEs for the 4 parameters ($\beta_\text{netflix}$, $\beta_\text{prime}$, $\beta_\text{ads}$, $\beta_\text{price}$), as well as their standard errors (from the Hessian). For each parameter we also construct a 95% confidence interval.
 
 ```{python}
 import numpy as np
@@ -203,36 +199,36 @@ results = pd.DataFrame({
 results
 ```
 
-Compared to MLE approach:
-•	The posterior means almost exactly match the MLEs, indicating that our priors were relatively weak compared to the data information.
-•	Posterior SDs are slightly smaller than the MLE SEs for the ad and price coefficients; for brands they’re very similar, reflecting high information content in the data.
-•	The 95% intervals overlap almost perfectly between Bayesian and frequentist approaches for all parameters, with negligible shifts.
+Compared to MLE approach:  
+•	The posterior means almost exactly match the MLEs, indicating that our priors were relatively weak compared to the data information.  
+•	Posterior SDs are slightly smaller than the MLE SEs for the ad and price coefficients; for brands they’re very similar, reflecting high information content in the data.  
+•	The 95% intervals overlap almost perfectly between Bayesian and frequentist approaches for all parameters, with negligible shifts.  
 
 
 ## 6. Discussion
-1. Observation
-    Even without knowing the “true” simulated parameters, the estimates make sense:
-	•	They rank brands (Netflix > Prime > baseline) plausibly,
-	•	They show ads have a positive effect (β_ads > 0),
-	•	And they capture the intuitive negative impact of price.
+1. Observation  
+    Even without knowing the “true” simulated parameters, the estimates make sense:  
+	•	They rank brands (Netflix > Prime > baseline) plausibly,  
+	•	They show ads have a positive effect (β_ads > 0),  
+	•	And they capture the intuitive negative impact of price.  
+  
+2. Interpretation of $\beta_\text{netflix}$ > $\beta_\text{prime}$  
+	A larger $\beta\$ means a larger “slice” of the choice probability (holding other attributes equal). So respondents are, on average, more likely to pick Netflix over Prime if everything else (advertising, price) is the same.  
 
-2. Interpretation of $\beta_\text{netflix}$ > $\beta_\text{prime}$
-	A larger $\beta\$ means a larger “slice” of the choice probability (holding other attributes equal). So respondents are, on average, more likely to pick Netflix over Prime if everything else (advertising, price) is the same.
+3. Negative Price Coefficient  
+	A negative price coefficient means higher prices lower utility, which is exactly what economic theory predicts: as the cost of an alternative goes up, its attractiveness (and thus its choice probability) goes down. The magnitude (≈ –0.1) tells you that a one-dollar increase in price multiplies an alternative’s odds by exp(–0.1) ≈ 0.90, i.e. a roughly 10% drop in odds per dollar.  
 
-3. Negative Price Coefficient
-	A negative price coefficient means higher prices lower utility, which is exactly what economic theory predicts: as the cost of an alternative goes up, its attractiveness (and thus its choice probability) goes down. The magnitude (≈ –0.1) tells you that a one-dollar increase in price multiplies an alternative’s odds by exp(–0.1) ≈ 0.90, i.e. a roughly 10% drop in odds per dollar.
-
-4. How to Move to a Hierarchical Model
-    There are multiple steps we need to take if we want to move from a fixed-coefficients MNL to a hierarchical (random-parameters) model
-    At simulation process, we would:
-        •	Specify hyper-parameters like a population mean vector and covariance matrix for betas
-        •	Draw individual betas
-        •	Generate choices conditional on $\beta_\text{i}$
-    At estimation process, we would:
-        •	Write down the integrated likelihood
-        $L(\mu, \Sigma)=\prod_{i=1}^N \int\left[\prod_{t=1}^{T_i} P\left(y_{i t} \mid X_{i t}, \beta\right)\right] \phi(\beta \mid \mu, \Sigma) d \beta$
-        •	Approximate or sample the integrals with methods like MLE or MCMC
-        •	Recover both levels of parameters
+4. How to Move to a Hierarchical Model  
+    There are multiple steps we need to take if we want to move from a fixed-coefficients MNL to a hierarchical (random-parameters) model.  
+    At simulation process, we would:  
+        •	Specify hyper-parameters like a population mean vector and covariance matrix for betas  
+        •	Draw individual betas  
+        •	Generate choices conditional on $\beta_\text{i}$  
+    At estimation process, we would:  
+        •	Write down the integrated likelihood  
+        $L(\mu, \Sigma)=\prod_{i=1}^N \int\left[\prod_{t=1}^{T_i} P\left(y_{i t} \mid X_{i t}, \beta\right)\right] \phi(\beta \mid \mu, \Sigma) d \beta$  
+        •	Approximate or sample the integrals with methods like MLE or MCMC  
+        •	Recover both levels of parameters  
     
     The key change here is that, instead of one global $\beta_\$ vector, you model a distribution over betas. 
     
