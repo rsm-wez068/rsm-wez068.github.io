@@ -216,14 +216,16 @@ Compared to MLE approach:
 	A larger $\beta\$ means a larger “slice” of the choice probability (holding other attributes equal). So respondents are, on average, more likely to pick Netflix over Prime if everything else (advertising, price) is the same.  
 
 3. Negative Price Coefficient  
-	A negative price coefficient means higher prices lower utility, which is exactly what economic theory predicts: as the cost of an alternative goes up, its attractiveness (and thus its choice probability) goes down. The magnitude (≈ –0.1) tells you that a one-dollar increase in price multiplies an alternative’s odds by exp(–0.1) ≈ 0.90, i.e. a roughly 10% drop in odds per dollar.  
+	A negative price coefficient means higher prices lower utility, which is exactly what economic theory predicts: as the cost of an alternative goes up, its attractiveness (and thus its choice probability) goes down. The magnitude (≈ –0.1) tells that a one-dollar increase in price multiplies an alternative’s odds by exp(–0.1) ≈ 0.90, i.e. a roughly 10% drop in odds per dollar.  
 
 4. How to Move to a Hierarchical Model  
     There are multiple steps we need to take if we want to move from a fixed-coefficients MNL to a hierarchical (random-parameters) model.  
+
     At simulation process, we would:  
         •	Specify hyper-parameters like a population mean vector and covariance matrix for betas  
         •	Draw individual betas  
         •	Generate choices conditional on $\beta_\text{i}$  
+    
     At estimation process, we would:  
         •	Write down the integrated likelihood  
         $L(\mu, \Sigma)=\prod_{i=1}^N \int\left[\prod_{t=1}^{T_i} P\left(y_{i t} \mid X_{i t}, \beta\right)\right] \phi(\beta \mid \mu, \Sigma) d \beta$  
