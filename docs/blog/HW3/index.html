@@ -262,7 +262,7 @@ u_{ij} = (1 \times Netflix_j) + (0.5 \times Prime_j) + (-0.8*Ads_j) - 0.1\times 
 <section id="preparing-the-data-for-estimation" class="level2">
 <h2 class="anchored" data-anchor-id="preparing-the-data-for-estimation">3. Preparing the Data for Estimation</h2>
 <p>Here we prepare the data for estimation. We need to keep track of 3 dimensions (consumer <span class="math inline">\(i\)</span>, covariate <span class="math inline">\(k\)</span>, and product <span class="math inline">\(j\)</span>) instead of the typical 2 dimensions for cross-sectional regression models (consumer <span class="math inline">\(i\)</span> and covariate <span class="math inline">\(k\)</span>). In addition, we need to convert the categorical variables for brand and ads into binary variables.</p>
-<div id="0c369170" class="cell" data-execution_count="1">
+<div id="63d952be" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'conjoint_data.csv'</span>)</span>
@@ -460,7 +460,7 @@ u_{ij} = (1 \times Netflix_j) + (0.5 \times Prime_j) + (-0.8*Ads_j) - 0.1\times 
 <section id="estimation-via-maximum-likelihood" class="level2">
 <h2 class="anchored" data-anchor-id="estimation-via-maximum-likelihood">4. Estimation via Maximum Likelihood</h2>
 <p>Now we use <code>scipy.optimize()</code> in Python to find the MLEs for the 4 parameters (<span class="math inline">\(\beta_\text{netflix}\)</span>, <span class="math inline">\(\beta_\text{prime}\)</span>, <span class="math inline">\(\beta_\text{ads}\)</span>, <span class="math inline">\(\beta_\text{price}\)</span>), as well as their standard errors (from the Hessian). For each parameter we also construct a 95% confidence interval.</p>
-<div id="66aa074f" class="cell" data-execution_count="2">
+<div id="d3aa5373" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -509,7 +509,7 @@ beta_netflix:  0.9412 (SE = 0.1143), 95% CI = [0.7173, 1.1651]
 <h2 class="anchored" data-anchor-id="estimation-via-bayesian-methods">5. Estimation via Bayesian Methods</h2>
 <p>Now we try to estimate via a metropolis-hasting MCMC sampler of the posterior distribution. We take 11,000 steps and throw away the first 1,000, retaining the subsequent 10,000. For the betas on the binary variables, we use N(0,5), while for the price beta, we use N(0,1).</p>
 <p>A trace plot and a histogram of posterior for beta_netflix are also shown below to demonstrate the simulation result.</p>
-<div id="f1920fa6" class="cell" data-execution_count="3">
+<div id="347e6132" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Log-likelihood function</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> log_likelihood(params):</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    beta_N, beta_P, beta_ads, beta_price <span class="op">=</span> params</span>
@@ -610,31 +610,31 @@ beta_netflix:  0.9412 (SE = 0.1143), 95% CI = [0.7173, 1.1651]
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">beta_netflix</td>
-<td>0.955276</td>
-<td>0.098409</td>
-<td>0.794319</td>
-<td>1.159769</td>
+<td>0.967757</td>
+<td>0.111654</td>
+<td>0.748538</td>
+<td>1.156955</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">beta_prime</td>
-<td>0.503116</td>
-<td>0.098345</td>
-<td>0.331999</td>
-<td>0.733702</td>
+<td>0.510517</td>
+<td>0.104235</td>
+<td>0.336134</td>
+<td>0.717981</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">beta_ads</td>
-<td>-0.734298</td>
-<td>0.084006</td>
-<td>-0.888835</td>
-<td>-0.555603</td>
+<td>-0.738086</td>
+<td>0.087330</td>
+<td>-0.897508</td>
+<td>-0.576862</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">beta_price</td>
-<td>-0.099993</td>
-<td>0.006181</td>
-<td>-0.111770</td>
-<td>-0.088554</td>
+<td>-0.099913</td>
+<td>0.006373</td>
+<td>-0.110418</td>
+<td>-0.087266</td>
 </tr>
 </tbody>
 </table>
