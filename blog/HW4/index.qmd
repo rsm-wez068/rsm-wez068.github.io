@@ -2,9 +2,6 @@
 title: "K-Means & KNN exploration"
 author: "Wei Zhou"
 date: 2025-06-10
-jupyter: python3
-execute:
-  engine: jupyter
 ---
 
 
